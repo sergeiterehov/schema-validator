@@ -1,38 +1,47 @@
 import { ISchema } from "./Schema";
+import { SchemaError } from "./SchemaError";
 
-abstract class Validator {
-    public abstract get schema(): ISchema;
-}
+const validators: { [s: string]: typeof Validator } = {};
 
-enum GroupSchemaOperations {
-    All = 'all',
-    Any = 'any',
-    One = 'one',
-}
-
-interface IGroupSchema extends ISchema {
-    $type: 'group';
-    operation?: GroupSchemaOperations;
-    list: ISchema[];
-}
-
-class GroupValidator extends Validator {
-    public operation: GroupSchemaOperations = GroupSchemaOperations.All;
-    public list: ISchema[];
-
-    constructor(schema: IGroupSchema) {
-        super();
-
-        if (undefined !== schema.operation) {
-            this.operation;
-        }
+function build(schema: ISchema): Validator {
+    if (! schema.$type) {
+        throw new Error('Undefined value of type ($type)');
     }
 
-    public get schema(): IGroupSchema {
-        return {
-            $type: 'group',
-            list: this.list,
-            operation: this.operation,
-        }
+    if (! validators[schema.$type]) {
+        throw new Error(`Unknown validator type "${schema.$type}"`);
+    }
+
+    const validatorClass: typeof Validator | any = validators[schema.$type];
+
+    return new validatorClass(schema);
+}
+
+export function register<T extends typeof Validator>(type: string, validatorClass: T): T {
+    if (! validators[type]) {
+        validators[type] = validatorClass;
+    }
+
+    return validatorClass;
+}
+
+export abstract class Validator {
+    constructor(schema: ISchema) {
+        //
+    }
+
+    public static parse(schema: ISchema): Validator {
+        return build(schema);
+    }
+
+    public static stringify(validator: Validator): string {
+        return JSON.stringify(validator.schema);
+    }
+
+    public abstract get schema(): ISchema;
+    protected abstract validate(data: any, context?: any): SchemaError[];
+
+    public errors(data: any, context?: any): SchemaError[] {
+        return this.validate(data, undefined !== context ? context : data);
     }
 }
