@@ -11,9 +11,11 @@ describe("The common test", () => {
             ]).when(required().ref('firstName')),
         });
         
-        console.log(test.errors({
+        const errors = test.errors({
             firstName: 'ivanov',
             lastName: 123,
-        }));
+        });
+
+        console.log(errors);
     });
 });

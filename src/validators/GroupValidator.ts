@@ -40,6 +40,27 @@ export class GroupValidator extends Validator {
         const errors: SchemaError[] = [];
         this.list.forEach((rule) => errors.push(...rule.errors(data, context)));
 
+        if (! errors) {
+            return errors;
+        }
+
+        switch (this.operation) {
+            case GroupSchemaOperations.All:
+                break;
+            case GroupSchemaOperations.Any:
+                if (errors.length < this.list.length) {
+                    return [];
+                }
+                break;
+            case GroupSchemaOperations.One:
+                if (errors.length === this.list.length - 1) {
+                    return [];
+                }
+                break;
+            default:
+                break;
+        }
+
         return errors;
     }
 }
