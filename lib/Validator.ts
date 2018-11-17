@@ -14,6 +14,8 @@ function build(schema: ISchema): Validator {
 
     const validatorClass: typeof Validator | any = validators[schema.$type];
 
+    // TODO: validator must have static method for building from schema additional.
+    // Here must use that static method.
     return new validatorClass(schema);
 }
 
