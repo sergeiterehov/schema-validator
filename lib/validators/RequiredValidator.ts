@@ -17,7 +17,7 @@ export class RequiredValidator extends Validator {
         };
     }
 
-    protected validate(): SchemaError[] {
+    protected validate(data: any, context?: any): SchemaError[] {
         return [];
     }
 }

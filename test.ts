@@ -9,4 +9,7 @@ const test = object({
     ]).when(required().ref('firstName')),
 });
 
-console.log(Validator.stringify(test));
+console.log(test.errors({
+    firstName: 'ivanov',
+    lastName: 123,
+}));

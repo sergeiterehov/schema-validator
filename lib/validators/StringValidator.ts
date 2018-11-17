@@ -17,8 +17,14 @@ export class StringValidator extends Validator {
         };
     }
 
-    protected validate(): SchemaError[] {
-        return [];
+    protected validate(data: any, context?: any): SchemaError[] {
+        const errors: SchemaError[] = [];
+    
+        if ('string' !== typeof data) {
+            errors.push('Must be string');
+        }
+
+        return errors;
     }
 }
 

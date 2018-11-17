@@ -16,10 +16,12 @@ export interface IGroupSchema extends ISchema {
 
 export class GroupValidator extends Validator {
     public operation: GroupSchemaOperations = GroupSchemaOperations.All;
-    public list: ISchema[];
+    public list: Validator[];
 
     constructor(schema: IGroupSchema) {
         super(schema);
+
+        this.list = schema.list.map(Validator.parse);
 
         if (undefined !== schema.operation) {
             this.operation;
@@ -29,13 +31,16 @@ export class GroupValidator extends Validator {
     protected destructor(): IGroupSchema {
         return {
             $type: 'group',
-            list: this.list,
+            list: this.list.map((rule) => rule.schema),
             operation: this.operation,
         }
     }
 
-    protected validate(): SchemaError[] {
-        return [];
+    protected validate(data: any, context?: any): SchemaError[] {
+        const errors: SchemaError[] = [];
+        this.list.forEach((rule) => errors.push(...rule.errors(data, context)));
+
+        return errors;
     }
 }
 

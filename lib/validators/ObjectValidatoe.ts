@@ -33,8 +33,22 @@ export class ObjectValidator extends Validator {
         };
     }
 
-    protected validate(): SchemaError[] {
-        return [];
+    protected validate(data: any, context?: any): SchemaError[] {
+        const errors: SchemaError[] = [];
+
+        if ('object' !== typeof data) {
+            errors.push('Must be object');
+        } {
+            Object.keys(this.keys).forEach((key) => {
+                errors.push(
+                    ...this.keys[key]
+                        .errors(data[key])
+                        .map((error) => `${key}: ${error}`)
+                );
+            });
+        }
+
+        return errors;
     }
 }
 
