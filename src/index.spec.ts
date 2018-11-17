@@ -13,7 +13,6 @@ describe("The common test", () => {
         
         const errors = test.errors({
             firstName: 'ivanov',
-            lastName: 123,
         });
 
         console.log(errors);

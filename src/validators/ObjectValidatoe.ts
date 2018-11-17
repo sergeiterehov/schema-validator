@@ -36,9 +36,13 @@ export class ObjectValidator extends Validator {
     protected validate(data: any, context?: any): SchemaError[] {
         const errors: SchemaError[] = [];
 
+        if (undefined === data) {
+            return errors;
+        }
+
         if ('object' !== typeof data) {
             errors.push('Must be object');
-        } {
+        } else {
             Object.keys(this.keys).forEach((key) => {
                 errors.push(
                     ...this.keys[key]

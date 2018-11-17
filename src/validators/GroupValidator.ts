@@ -15,7 +15,7 @@ export interface IGroupSchema extends ISchema {
 }
 
 export class GroupValidator extends Validator {
-    public operation: GroupSchemaOperations = GroupSchemaOperations.All;
+    public operation: GroupSchemaOperations;
     public list: Validator[];
 
     constructor(schema: IGroupSchema) {
@@ -23,8 +23,10 @@ export class GroupValidator extends Validator {
 
         this.list = schema.list.map(Validator.parse);
 
-        if (undefined !== schema.operation) {
-            this.operation;
+        if (undefined === schema.operation) {
+            this.operation = GroupSchemaOperations.All;
+        } else {
+            this.operation = schema.operation;
         }
     }
 
@@ -38,6 +40,7 @@ export class GroupValidator extends Validator {
 
     protected validate(data: any, context?: any): SchemaError[] {
         const errors: SchemaError[] = [];
+
         this.list.forEach((rule) => errors.push(...rule.errors(data, context)));
 
         if (! errors) {

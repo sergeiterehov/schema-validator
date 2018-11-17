@@ -19,6 +19,10 @@ export class StringValidator extends Validator {
 
     protected validate(data: any, context?: any): SchemaError[] {
         const errors: SchemaError[] = [];
+
+        if (undefined === data) {
+            return errors;
+        }
     
         if ('string' !== typeof data) {
             errors.push('Must be string');
