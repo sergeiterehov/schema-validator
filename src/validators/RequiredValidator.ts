@@ -7,7 +7,7 @@ export interface IRequiredSchema extends ISchema {
 }
 
 export class RequiredValidator extends Validator {
-    constructor(schema) {
+    constructor(schema: IRequiredSchema) {
         super(schema);
     }
 

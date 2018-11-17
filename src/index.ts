@@ -1,8 +1,9 @@
-import { GroupSchemaOperations, GroupValidator } from "./lib/validators/GroupValidator";
-import { Validator } from "./lib/Validator";
-import { ObjectValidator } from "./lib/validators/ObjectValidatoe";
-import { RequiredValidator } from "./lib/validators/RequiredValidator";
-import { StringValidator } from "./lib/validators/StringValidator";
+import { GroupSchemaOperations, GroupValidator } from "./validators/GroupValidator";
+import { Validator } from "./Validator";
+import { ObjectValidator } from "./validators/ObjectValidatoe";
+import { RequiredValidator } from "./validators/RequiredValidator";
+import { StringValidator } from "./validators/StringValidator";
+import { ISchema } from "./Schema";
 
 export const group = (
     list: Validator[],
@@ -18,7 +19,7 @@ export const object = (
 ) => new ObjectValidator({
     $type: 'object',
     keys: (() => {
-        const list = {};
+        const list: {[key: string]: ISchema} = {};
 
         Object.keys(keys).forEach((key) => {
             list[key] = keys[key].schema;

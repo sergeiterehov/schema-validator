@@ -21,7 +21,7 @@ export class ObjectValidator extends Validator {
     }
 
     protected destructor(): IObjectSchema {
-        const keys = {};
+        const keys: {[key: string]: ISchema} = {};
 
         Object.keys(this.keys).forEach((key) => {
             keys[key] = this.keys[key].schema;
