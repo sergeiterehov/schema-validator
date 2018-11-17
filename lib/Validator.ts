@@ -26,8 +26,17 @@ export function register<T extends typeof Validator>(type: string, validatorClas
 }
 
 export abstract class Validator {
+    private $when?: Validator;
+    private $context?: any;
+
     constructor(schema: ISchema) {
-        //
+        if (schema.$when) {
+            this.$when = Validator.parse(schema.$when);
+        }
+
+        if (schema.$context) {
+            this.$context = schema.$context;
+        }
     }
 
     public static parse(schema: ISchema): Validator {
@@ -38,10 +47,30 @@ export abstract class Validator {
         return JSON.stringify(validator.schema);
     }
 
-    public abstract get schema(): ISchema;
+    protected abstract destructor(): ISchema;
     protected abstract validate(data: any, context?: any): SchemaError[];
+
+    public get schema(): ISchema {
+        return {
+            $when: this.$when ? this.$when.schema : undefined,
+            $context: this.$context,
+            ...this.destructor(),
+        };
+    }
 
     public errors(data: any, context?: any): SchemaError[] {
         return this.validate(data, undefined !== context ? context : data);
+    }
+
+    public when(rule: Validator): Validator {
+        this.$when = rule;
+
+        return this;
+    }
+
+    public ref(...context: string[]): Validator {
+        this.$context = context;
+
+        return this;
     }
 }

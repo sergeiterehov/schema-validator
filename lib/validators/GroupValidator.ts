@@ -26,7 +26,7 @@ export class GroupValidator extends Validator {
         }
     }
 
-    public get schema(): IGroupSchema {
+    protected destructor(): IGroupSchema {
         return {
             $type: 'group',
             list: this.list,

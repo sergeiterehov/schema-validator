@@ -1,3 +1,6 @@
+import { group, object, required, string } from ".";
+import { Validator } from "./lib/Validator";
+
 const test = object({
     firstName: string(),
     lastName: group([
@@ -6,4 +9,4 @@ const test = object({
     ]).when(required().ref('firstName')),
 });
 
-console.log(test);
+console.log(Validator.stringify(test));
