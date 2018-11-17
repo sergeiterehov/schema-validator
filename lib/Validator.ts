@@ -1,8 +1,16 @@
 import { ISchema } from "./Schema";
 import { SchemaError } from "./SchemaError";
 
+/**
+ * Global defined validators.
+ */
 const validators: { [s: string]: typeof Validator } = {};
 
+/**
+ * Create a validators logic object the schema object.
+ *
+ * @param schema Validator schema object.
+ */
 function build(schema: ISchema): Validator {
     if (! schema.$type) {
         throw new Error('Undefined value of type ($type)');
@@ -19,6 +27,12 @@ function build(schema: ISchema): Validator {
     return new validatorClass(schema);
 }
 
+/**
+ * Registrate vlidator by global name.
+ *
+ * @param type Global name of type.
+ * @param validatorClass Validator based class, realizes the validators logic.
+ */
 export function register<T extends typeof Validator>(type: string, validatorClass: T): T {
     if (! validators[type]) {
         validators[type] = validatorClass;
@@ -27,6 +41,9 @@ export function register<T extends typeof Validator>(type: string, validatorClas
     return validatorClass;
 }
 
+/**
+ * Base class of Validator.
+ */
 export abstract class Validator {
     private $when?: Validator;
     private $context?: any;
@@ -41,10 +58,20 @@ export abstract class Validator {
         }
     }
 
+    /**
+     * Convert a structure of validator to validator logic.
+     *
+     * @param schema Validator schema structure.
+     */
     public static parse(schema: ISchema): Validator {
         return build(schema);
     }
 
+    /**
+     * Convert a validotrs object logic to JSON string of schema object.
+     *
+     * @param validator Validators logic object.
+     */
     public static stringify(validator: Validator): string {
         return JSON.stringify(validator.schema);
     }
@@ -52,6 +79,9 @@ export abstract class Validator {
     protected abstract destructor(): ISchema;
     protected abstract validate(data: any, context?: any): SchemaError[];
 
+    /**
+     * Convert the validators logic object to a schema object.
+     */
     public get schema(): ISchema {
         return {
             $when: this.$when ? this.$when.schema : undefined,
@@ -60,16 +90,32 @@ export abstract class Validator {
         };
     }
 
+    /**
+     * Returns array of validations errors.
+     *
+     * @param data Validations data.
+     * @param context Context of validator.
+     */
     public errors(data: any, context?: any): SchemaError[] {
         return this.validate(data, undefined !== context ? context : data);
     }
 
+    /**
+     * Registrate the Whens validator.
+     *
+     * @param rule Whens validator.
+     */
     public when(rule: Validator): Validator {
         this.$when = rule;
 
         return this;
     }
 
+    /**
+     * Registrate validations context.
+     *
+     * @param context Context of validator.
+     */
     public ref(...context: string[]): Validator {
         this.$context = context;
 
