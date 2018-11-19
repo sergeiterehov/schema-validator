@@ -1,5 +1,5 @@
 {
-  "name": "schema-validator",
+  "name": "@sete/schema-validator",
   "version": "0.0.1",
   "description": "Schema validator",
   "main": "index.ts",
@@ -14,10 +14,13 @@
   ],
   "author": "Sergei Terehov",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sergeiterehov/schema-validator.git"
+  },
   "dependencies": {},
   "devDependencies": {
     "@types/chai": "^4.1.7",
-    "@types/lodash": "^4.14.118",
     "@types/mocha": "^5.2.5",
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
