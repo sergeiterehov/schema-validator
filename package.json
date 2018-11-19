@@ -1,5 +1,5 @@
 {
-  "name": "@sete/schema-validator",
+  "name": "json-schema-validator",
   "version": "0.0.1",
   "description": "Schema validator",
   "main": "index.ts",
