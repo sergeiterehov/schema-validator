@@ -1,4 +1,5 @@
 import "mocha";
+import { expect } from "chai";
 import { group, object, required, string } from ".";
 
 describe("The common test", () => {
@@ -15,6 +16,6 @@ describe("The common test", () => {
             firstName: "Ivan",
         });
 
-        console.log(errors);
+        expect(errors).length(1, "Should contains 1 error");
     });
 });
