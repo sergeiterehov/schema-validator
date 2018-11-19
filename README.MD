@@ -5,7 +5,7 @@ Validate you JSON now!
 ## How to?
 
 ```ts
-import { group, object, required, string } from "schema-validator";
+import { group, object, required, string } from "json-sv";
 
 const test = object({
     firstName: string(),
