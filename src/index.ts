@@ -6,7 +6,14 @@ import { StringValidator } from "./validators/StringValidator";
 import { ISchema } from "./Schema";
 
 export const Schema = {
-    parse: (schema: ISchema) => Validator.parse(schema),
+    parse: (schema: ISchema | string) => {
+        if ("string" === typeof schema) {
+            schema = JSON.parse(schema);
+        }
+
+        Validator.parse(schema as ISchema);
+    },
+    objectify: (validator: Validator) => validator.schema,
     stringify: (validator: Validator) => Validator.stringify(validator),
 };
 
