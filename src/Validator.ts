@@ -46,7 +46,7 @@ export function register<T extends typeof Validator>(type: string, validatorClas
  */
 export abstract class Validator {
     private $when?: Validator;
-    private $context?: any;
+    private $context?: string[];
 
     constructor(schema: ISchema) {
         if (schema.$when) {
@@ -97,7 +97,21 @@ export abstract class Validator {
      * @param context Context of validator.
      */
     public errors(data: any, context?: any): SchemaError[] {
-        return this.validate(data, undefined !== context ? context : data);
+        if (this.$when && this.$when.errors(context, context).length) {
+            return [];
+        }
+        
+        let subject: any = data;
+        
+        if (this.$context && this.$context.length) {
+            if ('object' !== typeof data) {
+                throw new Error("Not nullable context can be used with object only")
+            }
+            
+            subject = this.$context.reduce((src, item) => src[item], subject);
+        }
+
+        return this.validate(subject, undefined !== context ? context : data);
     }
 
     /**

@@ -46,7 +46,7 @@ export class ObjectValidator extends Validator {
             Object.keys(this.keys).forEach((key) => {
                 errors.push(
                     ...this.keys[key]
-                        .errors(data[key])
+                        .errors(data[key], context)
                         .map((error) => `${key}: ${error}`)
                 );
             });

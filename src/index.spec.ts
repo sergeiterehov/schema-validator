@@ -8,11 +8,11 @@ describe("The common test", () => {
             lastName: group([
                 required(),
                 string(),
-            ]).when(required().ref('firstName')),
+            ]).when(required().ref("firstName")),
         });
         
         const errors = test.errors({
-            firstName: 'ivanov',
+            firstName: "Ivan",
         });
 
         console.log(errors);
