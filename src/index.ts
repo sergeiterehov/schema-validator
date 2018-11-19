@@ -5,6 +5,11 @@ import { RequiredValidator } from "./validators/RequiredValidator";
 import { StringValidator } from "./validators/StringValidator";
 import { ISchema } from "./Schema";
 
+export const Schema = {
+    parse: (schema: ISchema) => Validator.parse(schema),
+    stringify: (validator: Validator) => Validator.stringify(validator),
+};
+
 export const group = (
     list: Validator[],
     operation: GroupSchemaOperations = GroupSchemaOperations.All

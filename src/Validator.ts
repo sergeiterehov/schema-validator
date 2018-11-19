@@ -83,11 +83,20 @@ export abstract class Validator {
      * Convert the validators logic object to a schema object.
      */
     public get schema(): ISchema {
-        return {
+        const schema = {
             $when: this.$when ? this.$when.schema : undefined,
             $context: this.$context,
             ...this.destructor(),
         };
+
+        Object.keys(schema)
+            .forEach((key) => {
+                if (undefined === (schema as any)[key]) {
+                    delete (schema as any)[key];
+                }
+            });
+        
+        return schema;
     }
 
     /**

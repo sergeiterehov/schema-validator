@@ -34,7 +34,9 @@ export class GroupValidator extends Validator {
         return {
             $type: 'group',
             list: this.list.map((rule) => rule.schema),
-            operation: this.operation,
+            operation: GroupSchemaOperations.All === this.operation
+                ? undefined
+                : this.operation,
         }
     }
 
