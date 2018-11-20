@@ -1,6 +1,6 @@
 # JSON Schema Validator
 
-Validate you JSON now!
+Validate your JSON now!
 
 ## How to?
 
